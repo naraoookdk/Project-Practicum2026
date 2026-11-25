@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+/* 宇宙テーマのベーススタイルとカスタムアニメーション */
+@layer base {
+  body {
+    font-family: 'Noto Sans JP', 'M PLUS Rounded 1c', system-ui, -apple-system, sans-serif;
+    background-color: #0B0F19;
+    color: #F1F5F9;
+    overflow-x: hidden;
+  }
+}
+
+/* 星空のゆらぎアニメーション */
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.95);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scale(1.15);
+  }
+}
+
+/* QRスキャンラインの上下移動アニメーション */
+@keyframes scanline {
+  0% {
+    top: 8%;
+  }
+  50% {
+    top: 88%;
+  }
+  100% {
+    top: 8%;
+  }
+}
+
+/* 祝福モーダル用・きらめき回転 */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* モーダル登場時のポップアップ */
+@keyframes pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.88) translateY(12px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ゴールドカードのシマー効果 */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-twinkle {
+  animation: twinkle var(--twinkle-duration, 4s) ease-in-out infinite;
+}
+
+.animate-scanline {
+  animation: scanline 1.6s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 16s linear infinite;
+}
+
+.animate-pop-in {
+  animation: pop-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-shimmer {
+  background-size: 200% 100%;
+  animation: shimmer 4s linear infinite;
+}
+
+/* カスタムスクロールバー */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0B0F19;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
