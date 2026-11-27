@@ -1,0 +1,12 @@
+# 依存パッケージ
+node_modules/
+
+# ビルド成果物・キャッシュ
+dist/
+dist-ssr/
+*.local
+tsconfig.tsbuildinfo
+
+# エディタ・OS生成ファイル
+.DS_Store
+Thumbs.db

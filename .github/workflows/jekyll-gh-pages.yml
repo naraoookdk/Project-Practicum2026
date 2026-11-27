@@ -1,26 +1,54 @@
 name: Deploy to GitHub Pages
 
 on:
+  # main ブランチへのプッシュ時に実行
   push:
-    branches: ['main'] # ブランチ名が master の場合は 'master' に変更
+    branches: ['main']
+  # GitHub Actions 画面からの手動実行を許可
+  workflow_dispatch:
 
+# GitHub Pages へのデプロイに必要な権限
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 進行中のデプロイを中断せず、重複実行を直列化する
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
 jobs:
-  build-and-deploy:
+  # ビルドジョブ
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: リポジトリをチェックアウト
+        uses: actions/checkout@v4
+      - name: Node.js をセットアップ
+        uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install --include=dev
-      - run: npm run build
-      - uses: actions/configure-pages@v4
-      - uses: actions/upload-pages-artifact@v3
+          cache: 'npm'
+      - name: 依存パッケージをインストール
+        run: npm ci
+      - name: アプリケーションをビルド
+        run: npm run build
+      - name: GitHub Pages を設定
+        uses: actions/configure-pages@v5
+      - name: ビルド成果物をアップロード
+        uses: actions/upload-pages-artifact@v3
         with:
           path: './dist'
-      - uses: actions/deploy-pages@v4
+
+  # デプロイジョブ
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: GitHub Pages へデプロイ
+        id: deployment
+        uses: actions/deploy-pages@v5
